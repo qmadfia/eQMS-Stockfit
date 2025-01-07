@@ -233,9 +233,7 @@ function setupQuantityButtons() {
         updateQuantity('right-counter', -1);
     });
 }
-// =============================
-// 10. Kirim Data ke Google Sheets via Web App
-// =============================
+
 // =============================
 // 10. Kirim Data ke Google Sheets via Web App
 // =============================
