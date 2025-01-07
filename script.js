@@ -253,8 +253,8 @@ document.querySelector(".save-button").addEventListener("click", async () => {
     return { type: type.trim(), count: parseInt(count.trim(), 10) };
   });
 
-  const summaryItemsSf = document.querySelectorAll(".summary-item-sf");
-  const defectssf = Array.from(summaryItemsSf).map(item => {
+  const summaryItems = document.querySelectorAll(".summary-item");
+  const defectssf = Array.from(summaryItems).map(item => {
     const [type, count] = item.textContent.split(":");
     return { typesf: type.trim(), countsf: parseInt(count.trim(), 10) };
   });
@@ -275,14 +275,14 @@ document.querySelector(".save-button").addEventListener("click", async () => {
     defects, // Tambahkan array defects
 
     // Data untuk Database_Inspection_Stockfit dan Database_Defect_Stockfit
-    auditorsf: document.getElementById("auditor-sf").value,
-    ncvssf: document.getElementById("ncvs-sf").value,
-    modelNamesf: document.getElementById("model-name-sf").value,
-    styleNumbersf: document.getElementById("style-number-sf").value,
+    auditorsf: document.getElementById("auditor").value,
+    ncvssf: document.getElementById("ncvs").value,
+    modelNamesf: document.getElementById("model-name").value,
+    styleNumbersf: document.getElementById("style-number").value,
     fttsf: ftt, // Kirim nilai desimal
-    qtyInspectsf: parseInt(document.getElementById("qtyInspectOutput-sf").innerText, 10),
-    reworkKanansf: parseInt(document.getElementById("right-counter-sf").innerText, 10),
-    reworkKirisf: parseInt(document.getElementById("left-counter-sf").innerText, 10),
+    qtyInspectsf: parseInt(document.getElementById("qtyInspectOutput").innerText, 10),
+    reworkKanansf: parseInt(document.getElementById("right-counter").innerText, 10),
+    reworkKirisf: parseInt(document.getElementById("left-counter").innerText, 10),
     defectssf, // Tambahkan array defects stockfit
   };
 
