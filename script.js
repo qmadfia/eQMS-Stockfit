@@ -256,15 +256,15 @@ document.querySelector(".save-button").addEventListener("click", async () => {
   console.log("Defects array: ", defects); // Pastikan array defects berisi data yang benar
 
   const data = {
-    auditorsf: document.getElementById("auditor").value,
-    ncvssf: document.getElementById("ncvs").value,
-    modelNamesf: document.getElementById("model-name").value,
-    styleNumbersf: document.getElementById("style-number").value,
-    fttsf, // Kirim nilai desimal
-    qtyInspectsf: parseInt(document.getElementById("qtyInspectOutput").innerText, 10),
-    reworkKanansf: parseInt(document.getElementById("right-counter").innerText, 10),
-    reworkKirisf: parseInt(document.getElementById("left-counter").innerText, 10),
-    defectssf, // Tambahkan array defects
+    auditor: document.getElementById("auditor").value,
+    ncvs: document.getElementById("ncvs").value,
+    modelName: document.getElementById("model-name").value,
+    styleNumber: document.getElementById("style-number").value,
+    ftt, // Kirim nilai desimal
+    qtyInspect: parseInt(document.getElementById("qtyInspectOutput").innerText, 10),
+    reworkKanan: parseInt(document.getElementById("right-counter").innerText, 10),
+    reworkKiri: parseInt(document.getElementById("left-counter").innerText, 10),
+    defects, // Tambahkan array defects
   };
 
   try {
