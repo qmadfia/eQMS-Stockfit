@@ -249,8 +249,8 @@ document.querySelector(".save-button").addEventListener("click", async () => {
 
   const summaryItems = document.querySelectorAll(".summary-item");
   const defects = Array.from(summaryItems).map(item => {
-    const [typesf, countsf] = item.textContent.split(":");
-    return { typesf: typesf.trim(), countsf: parseInt(countsf.trim(), 10) };
+    const [type, count] = item.textContent.split(":");
+    return { type: type.trim(), count: parseInt(count.trim(), 10) };
   });
 
   console.log("Defects array: ", defects); // Pastikan array defects berisi data yang benar
