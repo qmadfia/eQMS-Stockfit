@@ -248,23 +248,23 @@ document.querySelector(".save-button").addEventListener("click", async () => {
   }
 
   const summaryItems = document.querySelectorAll(".summary-item");
-  const defects = Array.from(summaryItems).map(item => {
-    const [type, count] = item.textContent.split(":");
-    return { type: type.trim(), count: parseInt(count.trim(), 10) };
+  const defectssf = Array.from(summaryItems).map(item => {
+    const [typesf, countsf] = item.textContent.split(":");
+    return { typesf: type.trim(), countsf: parseInt(countsf.trim(), 10) };
   });
 
-  console.log("Defects array: ", defects); // Pastikan array defects berisi data yang benar
+  console.log("Defects array: ", defectssf); // Pastikan array defects berisi data yang benar
 
   const data = {
-    auditor: document.getElementById("auditor").value,
-    ncvs: document.getElementById("ncvs").value,
-    modelName: document.getElementById("model-name").value,
-    styleNumber: document.getElementById("style-number").value,
-    ftt, // Kirim nilai desimal
-    qtyInspect: parseInt(document.getElementById("qtyInspectOutput").innerText, 10),
-    reworkKanan: parseInt(document.getElementById("right-counter").innerText, 10),
-    reworkKiri: parseInt(document.getElementById("left-counter").innerText, 10),
-    defects, // Tambahkan array defects
+    auditorsf: document.getElementById("auditor").value,
+    ncvssf: document.getElementById("ncvs").value,
+    modelNamesf: document.getElementById("model-name").value,
+    styleNumbersf: document.getElementById("style-number").value,
+    fttsf, // Kirim nilai desimal
+    qtyInspectsf: parseInt(document.getElementById("qtyInspectOutput").innerText, 10),
+    reworkKanansf: parseInt(document.getElementById("right-counter").innerText, 10),
+    reworkKirisf: parseInt(document.getElementById("left-counter").innerText, 10),
+    defectssf, // Tambahkan array defects
   };
 
   try {
