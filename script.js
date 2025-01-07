@@ -96,23 +96,31 @@ function updateQuantity(counterId, change) {
 // 6. Fungsi untuk menangani klik tombol defect
 // =============================
 const defectCounts = {
-    "BOND GAP": 0,
     "OVER CEMENT": 0,
-    "OVER PRIMER": 0,
-    "STAIN R/B": 0,
-    "STAIN IP": 0,
-    "REBOUND": 0,
-    "POOR TRIMMING": 0,
-    "POOR PAINTING": 0,
-    "UNFITTING": 0,
-    "POOR CEMENT": 0,
-    "DOUBLE SKIN": 0,
-    "CONTAMINATION": 0,
-    "COLOR BLEEDING": 0,
-    "DAMAGE": 0,
-    "SHRINKAGE": 0,
-    "SOLELAYING": 0,
-    "BUBBLE": 0
+    "STAIN UPPER": 0,
+    "STAIN OUTSOLE": 0,
+    "THREAD END": 0,
+    "RAT HOLE": 0,
+    "BOND GAP UPPER": 0,
+    "WRINKLE": 0,
+    "ALIGN UP": 0,
+    "OVER BUFFING": 0,
+    "OFF CENTER": 0,
+    "ARIANCE": 0,
+    "X-RAY": 0,
+    "BROKEN STITCHING": 0,
+    "TOE / HEEL / COLLAR SHAPE": 0,
+    "STITCH MARGIN / SPI": 0,
+    "YELLOWING": 0,
+    "ROCKING": 0,
+    "BOND GAP MIDSOLE": 0,
+    "MATERIAL FAILURE": 0,
+    "COLOR MIGRATION": 0,
+    "PEEL OFF": 0,
+    "DELAMINATION": 0,
+    "METAL CONTAMINATION": 0,
+    "TWISTED SHOE": 0,
+    "LOGO / AIR BAG": 0
 };
 
 // Setup defect buttons
@@ -253,17 +261,9 @@ document.querySelector(".save-button").addEventListener("click", async () => {
     return { type: type.trim(), count: parseInt(count.trim(), 10) };
   });
 
-  const summaryItems = document.querySelectorAll(".summary-item");
-  const defectssf = Array.from(summaryItems).map(item => {
-    const [type, count] = item.textContent.split(":");
-    return { typesf: type.trim(), countsf: parseInt(count.trim(), 10) };
-  });
-
-  console.log("Defects array: ", defects);
-  console.log("Defects Stockfit array: ", defectssf);
+  console.log("Defects array: ", defects); // Pastikan array defects berisi data yang benar
 
   const data = {
-    // Data untuk Database_Inspection dan Database_Defect
     auditor: document.getElementById("auditor").value,
     ncvs: document.getElementById("ncvs").value,
     modelName: document.getElementById("model-name").value,
@@ -273,21 +273,10 @@ document.querySelector(".save-button").addEventListener("click", async () => {
     reworkKanan: parseInt(document.getElementById("right-counter").innerText, 10),
     reworkKiri: parseInt(document.getElementById("left-counter").innerText, 10),
     defects, // Tambahkan array defects
-
-    // Data untuk Database_Inspection_Stockfit dan Database_Defect_Stockfit
-    auditorsf: document.getElementById("auditor").value,
-    ncvssf: document.getElementById("ncvs").value,
-    modelNamesf: document.getElementById("model-name").value,
-    styleNumbersf: document.getElementById("style-number").value,
-    fttsf: ftt, // Kirim nilai desimal
-    qtyInspectsf: parseInt(document.getElementById("qtyInspectOutput").innerText, 10),
-    reworkKanansf: parseInt(document.getElementById("right-counter").innerText, 10),
-    reworkKirisf: parseInt(document.getElementById("left-counter").innerText, 10),
-    defectssf, // Tambahkan array defects stockfit
   };
 
   try {
-    const response = await fetch("https://script.google.com/macros/s/AKfycbw5A6fSrJikHvpqULKwXqUJPdRVngJRP9BDERV3zMpesc7Pypqb-oXxabNmZ0FTM_RuGQ/exec", {
+    const response = await fetch("https://script.google.com/macros/s/AKfycbznszQ3WXpD5WZfyzvfmJ21Hmq8tkCowhqYwxj7ewsohHOm2j4lja-ohPZJXVIcH2E8/exec", {
       method: "POST",
       body: JSON.stringify(data),
     });
@@ -302,7 +291,6 @@ document.querySelector(".save-button").addEventListener("click", async () => {
     console.error(error);
   }
 });
-
 
 // =============================
 // 11. Reset Data Setelah Simpan
