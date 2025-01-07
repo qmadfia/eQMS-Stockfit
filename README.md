@@ -1,1 +1,1 @@
-# eQMS-Stockfit
+# eQMS

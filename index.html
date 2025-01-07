@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspection Form</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">
+        <img src="logo.png.png" alt="Logo" class="logo">
+        <h1>eQMS</h1>
+    </div>
+    <div class="dashboard">
+        <!-- Form Section (Kiri Bawah) -->
+        <div class="form-section">
+            <label for="auditor">Auditor</label>
+            <select id="auditor">
+                <option value="">Select</option>
+                <option value="Badrowi">Badrowi</option>
+                <option value="Bagas Rasyid Wicaksono">Bagas Rasyid Wicaksono</option>
+                <option value="Sopan Sopian">Sopan Sopian</option>
+            </select>
+
+            <label for="ncvs">NCVS</label>
+            <select id="ncvs">
+                <option value="">Select</option>
+                <option value="101">NCVS 101</option>
+                <option value="102">NCVS 102</option>
+                <option value="103">NCVS 103</option>
+                <option value="104">NCVS 104</option>
+                <option value="105">NCVS 105</option>
+                <option value="106">NCVS 106</option>
+                <option value="107">NCVS 107</option>
+                <option value="108">NCVS 108</option>
+                <option value="109">NCVS 109</option>
+                <option value="110">NCVS 110</option>
+                <option value="111">NCVS 111</option>
+                <option value="112">NCVS 112</option>
+                <option value="113">NCVS 113</option>
+                <option value="114">NCVS 114</option>
+                <option value="115">NCVS 115</option>
+                <option value="116">NCVS 116</option>
+                <option value="201">NCVS 201</option>
+                <option value="202">NCVS 202</option>
+                <option value="203">NCVS 203</option>
+                <option value="204">NCVS 204</option>
+                <option value="205">NCVS 205</option>
+                <option value="206">NCVS 206</option>
+                <option value="207">NCVS 207</option>
+                <option value="208">NCVS 208</option>
+                <option value="209">NCVS 209</option>
+                <option value="210">NCVS 210</option>
+                <option value="211">NCVS 211</option>
+                <option value="212">NCVS 212</option>
+                <option value="213">NCVS 213</option>
+                <option value="214">NCVS 214</option>
+                <option value="215">NCVS 215</option>
+            </select>
+
+            <label for="model-name">Model Name</label>
+            <input type="text" id="model-name" placeholder="Enter model name">
+
+            <label for="style-number">Style Number</label>
+            <input type="text" id="style-number" placeholder="Enter style number">
+            <!-- Wrapper for Save Button -->
+            <div class="button-wrapper">
+                <button class="save-button">SIMPAN</button>
+            </div>
+        </div>
+               <!-- FTT Section -->
+            <div class="section">
+                <label for="ftt">FTT (First Time Through):</label>
+                <div id="fttOutput" class="counter">0%</div>
+            </div>
+              <!-- Bagian Reject Section dengan Input dan Output -->
+            <div id="reject-section">
+                <!-- Menu Input (Qty Inspect) -->
+                <div id="input-section">
+                    <button class="input-button">Qty Inspect</button>
+                </div>
+
+             <!-- Output Kolom -->
+                <div id="output-section">
+                    <div id="qtyInspectOutput">0</div> <!-- Menampilkan hasil klik -->
+                </div>
+            </div>
+               <!-- Summary Defect Section -->
+            <div class="summary-defect">
+                <h3>Summary Defect</h3>
+                <div id="summary-list">
+                    <!-- Summary akan ditampilkan di sini -->
+                </div>
+            </div>
+
+            <!-- Rework Section -->
+            <div class="rework-section">
+                <!-- Rework Left -->
+                <div class="rework-left">
+                    <h3>Rework Kiri</h3>
+                    <button id="rework-left" class="rework-button">Klik untuk Rework Kiri</button>
+                    <p id="left-counter">0</p>
+                </div>
+                <!-- Rework Right -->
+                <div class="rework-right">
+                    <h3>Rework Kanan</h3>
+                    <button id="rework-right" class="rework-button">Klik untuk Rework Kanan</button>
+                    <p id="right-counter">0</p>
+                </div>
+            </div>
+
+            <!-- Defect Menu Section -->
+            <div class="defect-menu">
+                <h3>Defect Menu</h3>
+                <div class="defect-items">
+                    <button class="defect-button">OVER CEMENT</button>
+                    <button class="defect-button">STAIN UPPER</button>
+                    <button class="defect-button">STAIN OUTSOLE</button>
+                    <button class="defect-button">THREAD END</button>
+                    <button class="defect-button">RAT HOLE</button>
+                    <button class="defect-button">BOND GAP UPPER</button>
+                    <button class="defect-button">WRINKLE</button>
+                    <button class="defect-button">ALIGN UP</button>
+                    <button class="defect-button">OVER BUFFING</button>
+                    <button class="defect-button">OFF CENTER</button>
+                    <button class="defect-button">ARIANCE</button>
+                    <button class="defect-button">X-RAY</button>
+                    <button class="defect-button">BROKEN STITCHING</button>
+                    <button class="defect-button">TOE / HEEL / COLLAR SHAPE</button>
+                    <button class="defect-button">STITCH MARGIN / SPI</button>
+                    <button class="defect-button">YELLOWING</button>
+                    <button class="defect-button">ROCKING</button>
+                    <button class="defect-button">BOND GAP MIDSOLE</button>
+                    <button class="defect-button">MATERIAL FAILURE</button>
+                    <button class="defect-button">COLOR MIGRATION</button>
+                    <button class="defect-button">PEEL OFF</button>
+                    <button class="defect-button">DELAMINATION</button>
+                    <button class="defect-button">METAL CONTAMINATION</button>
+                    <button class="defect-button">TWISTED SHOE</button>
+                    <button class="defect-button">LOGO / AIR BAG</button>
+                </div>
+               <!-- Plus and Minus Buttons -->
+            <div class="buttons">
+                <button id="plus-button" class="control-button">+</button>
+                <button id="minus-button" class="control-button">-</button>
+            </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
