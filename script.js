@@ -253,9 +253,17 @@ document.querySelector(".save-button").addEventListener("click", async () => {
     return { type: type.trim(), count: parseInt(count.trim(), 10) };
   });
 
-  console.log("Defects array: ", defects); // Pastikan array defects berisi data yang benar
+  const summaryItemsSf = document.querySelectorAll(".summary-item-sf");
+  const defectssf = Array.from(summaryItemsSf).map(item => {
+    const [type, count] = item.textContent.split(":");
+    return { typesf: type.trim(), countsf: parseInt(count.trim(), 10) };
+  });
+
+  console.log("Defects array: ", defects);
+  console.log("Defects Stockfit array: ", defectssf);
 
   const data = {
+    // Data untuk Database_Inspection dan Database_Defect
     auditor: document.getElementById("auditor").value,
     ncvs: document.getElementById("ncvs").value,
     modelName: document.getElementById("model-name").value,
@@ -265,6 +273,17 @@ document.querySelector(".save-button").addEventListener("click", async () => {
     reworkKanan: parseInt(document.getElementById("right-counter").innerText, 10),
     reworkKiri: parseInt(document.getElementById("left-counter").innerText, 10),
     defects, // Tambahkan array defects
+
+    // Data untuk Database_Inspection_Stockfit dan Database_Defect_Stockfit
+    auditorsf: document.getElementById("auditor-sf").value,
+    ncvssf: document.getElementById("ncvs-sf").value,
+    modelNamesf: document.getElementById("model-name-sf").value,
+    styleNumbersf: document.getElementById("style-number-sf").value,
+    fttsf: ftt, // Kirim nilai desimal
+    qtyInspectsf: parseInt(document.getElementById("qtyInspectOutput-sf").innerText, 10),
+    reworkKanansf: parseInt(document.getElementById("right-counter-sf").innerText, 10),
+    reworkKirisf: parseInt(document.getElementById("left-counter-sf").innerText, 10),
+    defectssf, // Tambahkan array defects stockfit
   };
 
   try {
@@ -283,6 +302,7 @@ document.querySelector(".save-button").addEventListener("click", async () => {
     console.error(error);
   }
 });
+
 
 // =============================
 // 11. Reset Data Setelah Simpan
