@@ -267,7 +267,7 @@ document.querySelector(".save-button").addEventListener("click", async () => {
   };
 
   try {
-    const response = await fetch("https://script.google.com/macros/s/AKfycbznszQ3WXpD5WZfyzvfmJ21Hmq8tkCowhqYwxj7ewsohHOm2j4lja-ohPZJXVIcH2E8/exec", {
+    const response = await fetch("https://script.google.com/macros/s/AKfycbyy6hctZeNZEF6Z18iMBmbpirb3STnWkqaBBZlpTEsBafL430IajbnRGdytoZwbZ6qKqQ/exec", {
       method: "POST",
       body: JSON.stringify(data),
     });
