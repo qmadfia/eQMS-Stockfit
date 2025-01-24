@@ -238,6 +238,11 @@ function setupQuantityButtons() {
 // 10. Kirim Data ke Google Sheets via Web App
 // =============================
 document.querySelector(".save-button").addEventListener("click", async () => {
+  // Panggil fungsi validasi sebelum melanjutkan
+  if (!validateInputs()) {
+    return; // Jika validasi gagal, hentikan proses
+  }
+
   const fttElement = document.getElementById("fttOutput");
   const fttRaw = fttElement ? fttElement.innerText.replace("%", "").trim() : "0";
   const ftt = parseFloat(fttRaw) / 100; // Konversi ke desimal
@@ -253,6 +258,8 @@ document.querySelector(".save-button").addEventListener("click", async () => {
     return { type: type.trim(), count: parseInt(count.trim(), 10) };
   });
 
+  console.log("Defects array: ", defects); // Pastikan array defects berisi data yang benar
+
   const data = {
     auditor: document.getElementById("auditor").value,
     ncvs: document.getElementById("ncvs").value,
@@ -263,7 +270,6 @@ document.querySelector(".save-button").addEventListener("click", async () => {
     reworkKanan: parseInt(document.getElementById("right-counter").innerText, 10),
     reworkKiri: parseInt(document.getElementById("left-counter").innerText, 10),
     defects, // Tambahkan array defects
-    source: "stockfit", // Tambahkan informasi asal aplikasi
   };
 
   try {
@@ -315,4 +321,23 @@ function resetAllFields() {
   totalReworkRight = 0;
 
   console.log("All fields have been reset.");
+}
+
+// =============================
+// 12. Validasi Input sebelum SIMPAN
+// =============================
+function validateInputs() {
+  // Ambil elemen input
+  const auditor = document.getElementById("auditor").value.trim();
+  const ncvs = document.getElementById("ncvs").value.trim();
+  const modelName = document.getElementById("model-name").value.trim();
+  const styleNumber = document.getElementById("style-number").value.trim();
+
+  // Cek apakah ada input yang kosong
+  if (!auditor || !ncvs || !modelName || !styleNumber) {
+    alert("Harap isi semua input sebelum menyimpan data!");
+    return false; // Validasi gagal
+  }
+
+  return true; // Validasi berhasil
 }
