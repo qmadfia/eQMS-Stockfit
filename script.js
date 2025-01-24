@@ -270,6 +270,7 @@ document.querySelector(".save-button").addEventListener("click", async () => {
     reworkKanan: parseInt(document.getElementById("right-counter").innerText, 10),
     reworkKiri: parseInt(document.getElementById("left-counter").innerText, 10),
     defects, // Tambahkan array defects
+    source: "stockfit", // Tambahkan informasi asal aplikasi
   };
 
   try {
