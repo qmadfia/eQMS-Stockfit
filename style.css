@@ -123,6 +123,7 @@ h1:hover {
 .save-button {
     background: linear-gradient(145deg, #4CAF50, #43a047);
     color: white;
+    width: calc(100% - 10px);
     padding: 12px 24px;
     border: none;
     border-radius: 8px;
@@ -457,7 +458,7 @@ h1:hover {
 .buttons {
     grid-column: 1 / 2;
     text-align: center;
-    margin: px 0;
+     margin-top: 25px;
 }
 
 .control-button {
