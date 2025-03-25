@@ -342,3 +342,18 @@ function validateInputs() {
 
   return true; // Validasi berhasil
 }
+
+// =============================
+// 13. Validasi Defect sebelum SIMPAN
+// =============================
+function validateDefectSelection() {
+    // Cek apakah ada defect yang terisi
+    const hasDefect = Object.values(defectCounts).some(count => count > 0);
+
+    if (!hasDefect) {
+        alert("Harap pilih setidaknya satu defect sebelum menyimpan data!");
+        return false;
+    }
+
+    return true; // Lolos validasi jika ada minimal satu defect
+}
