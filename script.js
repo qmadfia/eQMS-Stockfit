@@ -346,7 +346,7 @@ function validateInputs() {
 // =============================
 // 13. Validasi Defect sebelum SIMPAN
 // =============================
-function validateDefectSelection() {
+function validateDefects() {
     // Cek apakah ada defect yang terisi
     const hasDefect = Object.values(defectCounts).some(count => count > 0);
 
