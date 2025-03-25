@@ -236,12 +236,24 @@ function setupQuantityButtons() {
 }
 
 // =============================
-// 10. Kirim Data ke Google Sheets via Web App
+// 10. Kirim Data ke Google Sheets via Web App & Validasi Total Defect dan Total Rework Sebelum SIMPAN
 // =============================
 document.querySelector(".save-button").addEventListener("click", async () => {
   // Panggil fungsi validasi sebelum melanjutkan
   if (!validateInputs() || !validateDefects()) {
     return; // Jika validasi gagal, hentikan proses
+  }
+
+  // Hitung total defect dari summary defect
+  const totalDefect = Object.values(defectCounts).reduce((acc, count) => acc + count, 0);
+
+  // Hitung total rework (kiri + kanan)
+  const totalRework = totalReworkLeft + totalReworkRight;
+
+  // Cek apakah total defect lebih rendah dari total rework
+  if (totalDefect < totalRework) {
+    alert("Total defect tidak boleh lebih rendah dari total rework. Data tidak dapat disimpan.");
+    return;
   }
 
   const fttElement = document.getElementById("fttOutput");
@@ -259,14 +271,14 @@ document.querySelector(".save-button").addEventListener("click", async () => {
     return { type: type.trim(), count: parseInt(count.trim(), 10) };
   });
 
-  console.log("Defects array: ", defects); // Pastikan array defects berisi data yang benar
+  console.log("Defects array: ", defects);
 
   const data = {
     auditor: document.getElementById("auditor").value,
     ncvs: document.getElementById("ncvs").value,
     modelName: document.getElementById("model-name").value,
     styleNumber: document.getElementById("style-number").value,
-    ftt, // Kirim nilai desimal
+    ftt,
     qtyInspect: parseInt(document.getElementById("qtyInspectOutput").innerText, 10),
     reworkKanan: parseInt(document.getElementById("right-counter").innerText, 10),
     reworkKiri: parseInt(document.getElementById("left-counter").innerText, 10),
@@ -275,6 +287,10 @@ document.querySelector(".save-button").addEventListener("click", async () => {
   };
 
   try {
+    // Nonaktifkan tombol simpan untuk mencegah multiple submission
+    const saveButton = document.querySelector(".save-button");
+    saveButton.disabled = true;
+
     const response = await fetch("https://script.google.com/macros/s/AKfycbynXvd96pVNY53rEfPjoYAGDhLyF3SBh68GIHKYOtuW5hrTVZPkOFC3AGpQGyRRVd5OVw/exec", {
       method: "POST",
       body: JSON.stringify(data),
@@ -288,10 +304,11 @@ document.querySelector(".save-button").addEventListener("click", async () => {
   } catch (error) {
     alert("Terjadi kesalahan saat menyimpan data.");
     console.error(error);
+  } finally {
+    // Aktifkan kembali tombol simpan setelah proses selesai
+    document.querySelector(".save-button").disabled = false;
   }
 });
-
-
 // =============================
 // 11. Reset Data Setelah Simpan
 // =============================
