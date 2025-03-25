@@ -18,7 +18,7 @@ body {
     align-items: center;
     justify-content: flex-start; /* Mengubah agar logo dan teks berada di kiri */
     padding: 15px 30px; /* Mengurangi padding untuk kompak */
-    background: linear-gradient(to right, #2196F3, #4CAF50); /* Gradient background */
+    background: linear-gradient(to right, #800080, #2196F3); /* Gradient background */
     border-bottom: 4px solid #ffffff; /* Menambah garis bawah header */
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Menambah shadow lebih tegas */
     transition: all 0.3s ease-in-out; /* Efek transisi saat hover */
