@@ -248,7 +248,7 @@ document.querySelector(".save-button").addEventListener("click", async () => {
   const totalDefect = Object.values(defectCounts).reduce((acc, count) => acc + count, 0);
 
   // Hitung total rework (kiri + kanan)
-  const totalRework = totalReworkLeft + totalReworkRight;
+  const totalRework = (totalReworkLeft + totalReworkRight)/2;
 
   // Cek apakah total defect lebih rendah dari total rework
   if (totalDefect < totalRework) {
