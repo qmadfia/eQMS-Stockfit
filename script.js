@@ -1,3 +1,4 @@
+
 // =============================
 // 1. Variabel Global
 // =============================
@@ -135,10 +136,10 @@ function handleDefectClick(defectName) {
             defectCounts[defectName]++;  // Menambah defect jika tombol Plus aktif
         } else if (isSubtracting) {
             defectCounts[defectName]--;  // Mengurangi defect jika tombol Minus aktif
-            if (defectCounts[defectName] < 0) defectCounts[defectName] = 0; // Pastikan tidak negatif
         }
 
-        console.log(`Defect ${defectName} updated to ${defectCounts[defectName]}`); // Debugging
+        // Update nilai defect pada tampilan
+        console.log(`Defect ${defectName} updated to ${defectCounts[defectName]}`);
     } else {
         console.warn(`Defect '${defectName}' tidak dikenali.`);
     }
@@ -238,18 +239,10 @@ function setupQuantityButtons() {
 // 10. Kirim Data ke Google Sheets via Web App
 // =============================
 document.querySelector(".save-button").addEventListener("click", async () => {
-  console.log("Tombol Simpan Diklik"); // Debugging
-  console.log("Validasi Input:", validateInputs());
-  console.log("Validasi Defect:", validateDefects());
-
   // Panggil fungsi validasi sebelum melanjutkan
   if (!validateInputs() || !validateDefects()) {
-    console.log("Validasi gagal, proses dihentikan.");
     return; // Jika validasi gagal, hentikan proses
   }
-
-  console.log("Validasi sukses, data akan dikirim.");
-
 
   const fttElement = document.getElementById("fttOutput");
   const fttRaw = fttElement ? fttElement.innerText.replace("%", "").trim() : "0";
@@ -290,13 +283,12 @@ document.querySelector(".save-button").addEventListener("click", async () => {
     const result = await response.text();
     alert(result);
 
-    // Pastikan reset terjadi setelah data berhasil dikirim
-    console.log("Data berhasil dikirim, sekarang reset.");
+    // Reset all fields after successful save
     resetAllFields();
-} catch (error) {
+  } catch (error) {
     alert("Terjadi kesalahan saat menyimpan data.");
     console.error(error);
-}
+  }
 });
 
 
@@ -357,11 +349,10 @@ function validateInputs() {
 // =============================
 function validateDefects() {
     console.log("Memeriksa apakah ada defect yang dipilih...");
-    console.log("Defect counts:", defectCounts); // Tambahkan log untuk melihat data defectCounts
 
     // Mengecek apakah ada setidaknya satu defect yang memiliki jumlah > 0
     const hasDefect = Object.values(defectCounts).some(count => count > 0);
-
+    
     console.log("Hasil Pengecekan Defect:", hasDefect); // Debugging
 
     if (!hasDefect) {
