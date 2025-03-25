@@ -239,7 +239,7 @@ function setupQuantityButtons() {
 // =============================
 document.querySelector(".save-button").addEventListener("click", async () => {
   // Panggil fungsi validasi sebelum melanjutkan
-  if (!validateInputs()) {
+  if (!validateInputs() || !validateDefects()) {
     return; // Jika validasi gagal, hentikan proses
   }
 
