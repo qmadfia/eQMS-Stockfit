@@ -37,9 +37,7 @@ let ncvsSelect;     // Referensi untuk dropdown NCVS
 
 // Data mapping Auditor ke NCVS
 const auditorNcvsMap = {
-    "Badrowi": ["109", "110", "111", "112", "113", "114", "115", "116"],
-    "Sopan Sopian": ["101", "102", "103", "104", "105", "106", "107", "108"],
-    "Bagas Rasyid Wicaksono": ["201", "202", "203", "204", "207", "210"]
+    "Amalia Nur Aisyah": ["Line 1", "Line 2", "Line 3", "Line 4", "Line 5", "Line 6", "Line 7", "Line 8", "Line 9", "Line 10"]
 };
 
 // Kunci localStorage untuk menyimpan data NCVS yang sudah digunakan
@@ -449,8 +447,9 @@ async function saveData() {
     saveButton.disabled = true;
     saveButton.textContent = "MENYIMPAN...";
 
+dataToSend.appType = "stockfit";
     try {
-        const response = await fetch("https://script.google.com/macros/s/AKfycbwxc3nRKJ_RnPERPEDIaErNL0Ci_u4dbUVZB5VfmkTTip3KfNW-Ep4_cTdG6Luv0FUk/exec", { // Perhatikan URL ini, saya ganti satu karakter saja agar unik untuk pengujian
+        const response = await fetch("https://script.google.com/macros/s/AKfycbz6MSvAqN2vhsasQ-fK_2hxgOkeue3zlc5TsfyLISX8VydruDi5CdTsDgmyPXozv3SB/exec", { // Perhatikan URL ini, saya ganti satu karakter saja agar unik untuk pengujian
             method: "POST",
             body: JSON.stringify(dataToSend),
         });
