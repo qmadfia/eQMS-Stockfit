@@ -17,7 +17,7 @@ body {
     align-items: center;
     justify-content: flex-start; /* Mengubah agar logo dan teks berada di kiri */
     padding: 5px 30px; /* Mengurangi padding untuk kompak */
-    background: linear-gradient(to right, #2196F3, #4CAF50); /* Gradient background */
+    background: linear-gradient(to right, #2196F3, #8A2BE2); /* Gradient background */
     border-bottom: 4px solid #ffffff; /* Menambah garis bawah header */
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Menambah shadow lebih tegas */
     transition: all 0.3s ease-in-out; /* Efek transisi saat hover */
@@ -50,7 +50,7 @@ h1 {
 }
 
 h1:hover {
-    color: #FFEB3B; /* Mengubah warna saat hover */
+    color: #2ECC71; /* Mengubah warna saat hover */
     transform: scale(1.1); /* Efek pembesaran teks saat hover */
 }
 
@@ -605,7 +605,7 @@ h1:hover {
 }
 
 .defect-button {
-    background: linear-gradient(135deg, #2196F3, #1e88e5);
+    background: linear-gradient(135deg, #6A5ACD, #6A5ACD);
     color: white;
     padding: 12px 15px;
     border: none;
@@ -627,7 +627,7 @@ h1:hover {
 }
 
 .defect-button:hover {
-    background: linear-gradient(135deg, #1e88e5, #1565c0);
+    background: linear-gradient(135deg, #1e88e5, #8A2BE2);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
     transform: translateY(-3px);
 }
@@ -911,7 +911,7 @@ h1:hover {
 
 .announcement-icon:hover {
     transform: scale(1.2);
-    color: #e68900;
+    color: #FF5F1F;
 }
 
 .announcement-popup {
