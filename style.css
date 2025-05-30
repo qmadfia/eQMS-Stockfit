@@ -569,7 +569,7 @@ h1:hover {
 /* ============================= */
 .defect-menu {
     grid-column: 2 / 3;
-    grid-row: 2 / 4;     /* Tetap di baris 2, kolom 2 */
+    grid-row: 2 / 4;
     margin-top: 0;
     background: linear-gradient(145deg, #ffffff, #f3f3f3);
     border-radius: 15px;
@@ -578,9 +578,8 @@ h1:hover {
     transition: box-shadow 0.3s ease, transform 0.3s ease;
     font-size: 20px;
     text-align: center;
-    /* Tambahkan kembali min-height untuk stabilitas, tapi nilai yang lebih wajar */
-    min-height: 200px; /* Minimal tinggi yang cukup untuk konten dan tetap stabil */
-    overflow: auto; /* Tambahkan kembali overflow agar scrollbar muncul jika konten melebihi min-height */
+    min-height: 200px;
+    overflow: auto;
 }
 .defect-menu h3 {
     margin: 0 0 15px 0;
@@ -588,8 +587,6 @@ h1:hover {
     font-weight: bold;
     color: #333;
     text-transform: uppercase;
-    /* Hapus atau komentari baris ini untuk menghilangkan garis bawah */
-    /* border-bottom: 2px solid #ddd; */
     padding-bottom: 5px;
 }
 
@@ -605,7 +602,7 @@ h1:hover {
 }
 
 .defect-button {
-    background: linear-gradient(135deg, #6A5ACD, #6A5ACD);
+    /* Gaya dasar untuk semua tombol defect */
     color: white;
     padding: 12px 15px;
     border: none;
@@ -618,18 +615,54 @@ h1:hover {
     text-align: center;
     transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    min-width: 120px; /* Menentukan lebar minimal tombol */
-    min-height: 50px; /* Menentukan tinggi minimal tombol */
-    width: auto; /* Memungkinkan tombol menyesuaikan lebar, tetapi tidak lebih kecil dari min-width */
-    overflow: hidden; /* Menyembunyikan teks yang keluar dari batas tombol */
-    white-space: normal; /* Membiarkan teks membungkus ke baris berikutnya */
-    word-wrap: break-word; /* Membiarkan teks panjang membungkus ke baris berikutnya */
+    min-width: 120px;
+    min-height: 50px;
+    width: auto;
+    overflow: hidden;
+    white-space: normal;
+    word-wrap: break-word;
+}
+/* --- Warna untuk kelompok Biru Tua --- */
+.defect-button.defect-blue {
+    background: #00008B; /* Darker Blue (Navy Blue) - matching screenshot */
+    color: white; /* Ensure font is white */
+    /* Menghapus gradient untuk tampilan lebih flat seperti screenshot */
+    /* box-shadow sudah diatur di .defect-button, tapi bisa disesuaikan jika ingin bayangan yang lebih gelap/tajam */
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.6); /* Lebih gelap dan jelas */
 }
 
-.defect-button:hover {
-    background: linear-gradient(135deg, #1e88e5, #8A2BE2);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-    transform: translateY(-3px);
+.defect-button.defect-blue:hover {
+    background: #0000CD; /* Sedikit lebih terang saat hover */
+    box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.7); /* Bayangan lebih intens saat hover */
+    transform: translateY(-2px); /* Sedikit terangkat */
+}
+
+/* --- Warna untuk kelompok Kuning Cerah --- */
+.defect-button.defect-yellow {
+    background: #FFFF00; /* Vivid Yellow - matching screenshot */
+    color: black; /* Font hitam seperti di screenshot */
+    /* Menghapus gradient untuk tampilan lebih flat seperti screenshot */
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.6); /* Lebih gelap dan jelas */
+}
+
+.defect-button.defect-yellow:hover {
+    background: #FFD700; /* Sedikit lebih gelap saat hover */
+    box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.7); /* Bayangan lebih intens saat hover */
+    transform: translateY(-2px);
+}
+
+/* --- Warna untuk kelompok Merah Cerah --- */
+.defect-button.defect-red {
+    background: #FF0000; /* Pure Red - matching screenshot */
+    color: white; /* Ensure font is white */
+    /* Menghapus gradient untuk tampilan lebih flat seperti screenshot */
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.6); /* Lebih gelap dan jelas */
+}
+
+.defect-button.defect-red:hover {
+    background: #CC0000; /* Sedikit lebih gelap saat hover */
+    box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.7); /* Bayangan lebih intens saat hover */
+    transform: translateY(-2px);
 }
 
 .defect-button:active {
