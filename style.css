@@ -62,7 +62,7 @@ h1:hover {
     gap: 10px; /* Jaga jarak 10px antar grid items */
     padding: 1px; /* Mengurangi padding dashboard jika terlalu lebar */
     box-sizing: border-box;
-    grid-template-columns: 1fr 1.3fr;
+    grid-template-columns: 1fr 3.5fr;
 
 }
 /* ============================= */
