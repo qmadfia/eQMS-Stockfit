@@ -404,16 +404,16 @@ h1:hover {
 }
 
 .r-grade {
-    background: linear-gradient(135deg, #00008B);
+    background: linear-gradient(135deg, #00008B, #00008B);
 }
 
 .b-grade {
-    background: linear-gradient(135deg, #FFFF00);
+    background: linear-gradient(135deg, #FFFF00, #e6c200);
     color: black;
 }
 
 .c-grade {
-    background: linear-gradient(135deg, #FF0000);
+    background: linear-gradient(135deg, #FF0000, #cc0000);
 }
 
 
