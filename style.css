@@ -981,7 +981,7 @@ h1:hover {
     transform: translate(-50%, -50%);
     width: 60%;
     max-width: 600px;
-    max-height: 60vh; /* Batasi tinggi maksimal popup */
+    max-height: 80vh; /* Batasi tinggi maksimal popup */
     background: linear-gradient(135deg, #2979FF, #D50000); /* Gradasi biru dan merah */
     background-blend-mode: multiply; /* Efek memudar */
     box-shadow: 0 10px 25px rgba(213, 0, 0, 0.3); /* Shadow dengan warna senada */
