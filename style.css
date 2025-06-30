@@ -7,6 +7,7 @@ body {
     color: #333;
     margin: 0;
     padding: 0; /* Pastikan tidak ada padding body yang tidak perlu */
+    overscroll-behavior: none;
 }
 
 /* ============================= */
@@ -416,7 +417,6 @@ h1:hover {
     background: linear-gradient(135deg, #FF0000, #cc0000);
 }
 
-
 /* Efek hover pada tombol */
 .input-button:hover {
     opacity: 0.9;
@@ -582,6 +582,7 @@ h1:hover {
     min-height: 200px;
     overflow: auto;
 }
+
 .defect-menu h3 {
     margin: 0 0 15px 0;
     font-size: 18px;
@@ -614,7 +615,7 @@ h1:hover {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     text-align: center;
-    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    transition: all 0.3s ease; /* Transisi untuk semua properti */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     min-width: 120px;
     min-height: 50px;
@@ -623,51 +624,79 @@ h1:hover {
     white-space: normal;
     word-wrap: break-word;
 }
+
+/* ======================================================== */
+/* --- MODIFIKASI: Gaya Tombol yang Dipilih (Highlight) --- */
+/* ======================================================== */
+.defect-button.active {
+    /* 1. Border yang Jelas & Kontras */
+    border: 4px solid #39FF14; /* Warna Cyan/Aqua yang kontras */
+    
+    /* 2. Efek "Tertekan" dengan Inner Shadow */
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.7);
+
+    /* 3. Transformasi untuk memperkuat efek 'tertekan' */
+    transform: scale(0.98) translateY(1px);
+
+    /* 4. Menggelapkan sedikit warna asli agar border lebih menonjol */
+    filter: brightness(0.85);
+
+    /* 5. Padding disesuaikan agar ukuran dalam tombol tetap konsisten */
+    padding: 8px 11px;
+}
+
+.defect-button.active:hover {
+    /* Mencerahkan kembali saat di-hover, tapi tetap mempertahankan gaya 'active' */
+    filter: brightness(1);
+    
+    /* Pertahankan border dan shadow agar status 'active' tidak hilang */
+    border: 4px solid #39FF14;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8); /* Shadow lebih kuat */
+}
+/* ======================================================== */
+
+.defect-button:active {
+    /* Efek sesaat ketika tombol DIKLIK (bukan saat aktif) */
+    transform: scale(0.95);
+}
+
 /* --- Warna untuk kelompok Biru Tua --- */
 .defect-button.defect-blue {
-    background: #00008B; /* Darker Blue (Navy Blue) - matching screenshot */
-    color: white; /* Ensure font is white */
-    /* Menghapus gradient untuk tampilan lebih flat seperti screenshot */
-    /* box-shadow sudah diatur di .defect-button, tapi bisa disesuaikan jika ingin bayangan yang lebih gelap/tajam */
-    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.6); /* Lebih gelap dan jelas */
+    background: #00008B; /* Darker Blue (Navy Blue) */
+    color: white;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.6);
 }
 
 .defect-button.defect-blue:hover {
-    background: #0000CD; /* Sedikit lebih terang saat hover */
-    box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.7); /* Bayangan lebih intens saat hover */
-    transform: translateY(-2px); /* Sedikit terangkat */
+    background: #0000CD;
+    box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.7);
+    transform: translateY(-2px);
 }
 
 /* --- Warna untuk kelompok Kuning Cerah --- */
 .defect-button.defect-yellow {
-    background: #FFFF00; /* Vivid Yellow - matching screenshot */
-    color: black; /* Font hitam seperti di screenshot */
-    /* Menghapus gradient untuk tampilan lebih flat seperti screenshot */
-    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.6); /* Lebih gelap dan jelas */
+    background: #FFFF00; /* Vivid Yellow */
+    color: black;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.6);
 }
 
 .defect-button.defect-yellow:hover {
-    background: #FFD700; /* Sedikit lebih gelap saat hover */
-    box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.7); /* Bayangan lebih intens saat hover */
+    background: #FFD700;
+    box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.7);
     transform: translateY(-2px);
 }
 
 /* --- Warna untuk kelompok Merah Cerah --- */
 .defect-button.defect-red {
-    background: #FF0000; /* Pure Red - matching screenshot */
-    color: white; /* Ensure font is white */
-    /* Menghapus gradient untuk tampilan lebih flat seperti screenshot */
-    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.6); /* Lebih gelap dan jelas */
+    background: #FF0000; /* Pure Red */
+    color: white;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.6);
 }
 
 .defect-button.defect-red:hover {
-    background: #CC0000; /* Sedikit lebih gelap saat hover */
-    box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.7); /* Bayangan lebih intens saat hover */
+    background: #CC0000;
+    box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.7);
     transform: translateY(-2px);
-}
-
-.defect-button:active {
-    transform: scale(0.95);
 }
 /* ============================= */
 /* 9. Summary Defect Section    */
@@ -945,7 +974,7 @@ h1:hover {
 
 .announcement-icon:hover {
     transform: scale(1.2);
-    color: #FF5F1F;
+    color: #e68900;
 }
 
 .announcement-popup {
@@ -1037,4 +1066,77 @@ h1:hover {
     padding: 20px;
     background-color: rgba(255, 255, 255, 0.2); /* Latar belakang semi-transparan */
     border-radius: 10px;
+}
+
+/* ============================= */
+/* 13. Statistik Button Styles */
+/* ============================= */
+.statistic-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 17px;
+    right: 80px; /* Geser kiri dari tombol announcement */
+    padding: 0;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.statistic-icon {
+    font-size: 30px;
+    color: #3f51b5; /* Warna biru keunguan */
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.statistic-button:hover .statistic-icon {
+    transform: scale(1.2);
+    color: #303f9f;
+}
+
+/* Responsif pada layar kecil */
+@media (max-width: 600px) {
+    .statistic-button {
+        top: 20px;
+        right: 70px;
+    }
+}
+
+/* =========================================== */
+/* 14. STYLE UNTUK LOADING OVERLAY BARU */
+/* =========================================== */
+#loading-overlay {
+    /* Sembunyikan secara default */
+    display: none; 
+
+    /* Tampilan dan Posisi */
+    position: fixed; /* Tetap di layar bahkan saat scroll */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Latar belakang hitam semi-transparan */
+    z-index: 9999; /* Pastikan berada di atas semua elemen lain */
+
+    /* Pusatkan konten di dalamnya (spinner) */
+    justify-content: center;
+    align-items: center;
+}
+
+#loading-overlay.visible {
+    display: flex; /* Gunakan flex untuk memunculkan dan memusatkan spinner */
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 8px solid #f3f3f3; /* Lingkaran abu-abu muda */
+    border-top: 8px solid #3498db; /* Warna biru untuk bagian yang berputar */
+    border-radius: 50%;
+    animation: spin 1s linear infinite; /* Animasi berputar */
+}
+
+/* Animasi putaran untuk spinner */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
