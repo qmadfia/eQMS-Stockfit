@@ -1236,6 +1236,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
 Apabila terdapat kendala teknis, silakan hubungi nomor berikut: 088972745194.`
         },
+                {  
+            date: "06-30-2025",
+            // Teks pengumuman yang panjang tetap sama
+            text: `🛠️ FTT Sampling App Update v.2025.06
+
+🎨 Tampilan & UI
+1. Memperbaiki warna menu grade-defect yang secara fungsi aktif namun secara visual terlihat tidak aktif
+2. Memperbarui ukuran frame antar section
+3. Menambahkan highlight pada defect yang dipilih
+4. Menambahkan tombol menu untuk dashboard data statistik
+5. Mengimplementasikan overlay loading
+
+🧩 Logika Inspeksi & Validasi
+1. Membuat pola inspeksi untuk multi-defect dan multi-position
+2. Mengembangkan logika pencegah double-click pada fitur defect position
+3. Membuat logika agar setiap inspeksi hanya boleh berisi satu pairs defect position
+4. Mengaktifkan pilihan grade-defect hanya jika defect position diklik
+5. Menonaktifkan opsi A-grade ketika defect ditemukan
+6. Membuat logika agar saat memilih B/C-grade, posisi defect tidak disimpan ke bagian rework
+7. Membuat logika agar jumlah B/C-grade tidak memengaruhi perhitungan rework rate
+8. Menambahkan validasi bahwa jumlah inspeksi tidak boleh melebihi 50/24
+
+🔢 Counter, Grade, dan Nilai
+1. Menambahkan nilai hitung ke masing-masing counter grade
+2. Mengubah nilai counter defect-left dan defect-right menjadi 0.5
+3. Menyesuaikan formula perhitungan FTT dan rework rate dengan pola nilai defect position yang baru
+
+📦 Data Handling & Penyimpanan
+1. Memastikan seluruh data input tersimpan dengan benar di localStorage
+2. Mengimplementasikan validasi localStorage agar data tetap tersimpan meski browser ditutup atau di-refresh
+3. Mngoptimasi keamanan dan volume data input API
+4. Mngoptimasi batas permintaan (request limits) pada Vercel
+5. Menerapkan rate limiting pada Vercel Functions
+6. Menyimpan nilai yang tepat untuk Rework Left, Right, dan Pairs ke dalam database`
+        },
     ];
     let currentAnnouncementIndex = 0;
     let viewedAnnouncements = JSON.parse(localStorage.getItem('viewedAnnouncements')) || [];
