@@ -14,6 +14,10 @@
 <button id="announcement-button" class="announcement-button">
     <i class="fas fa-bell announcement-icon"></i>
 </button>
+  <!-- Tombol Statistik -->
+<button class="statistic-button" title="Lihat Statistik Data">
+  <i class="statistic-icon">📊</i>
+</button>
     </div>
     <div class="dashboard">
         </div>
@@ -37,12 +41,12 @@
 
             <label for="auditor">Auditor</label>
             <select id="auditor">
+                <option value="">Select</option>
                 <option value="Amalia Nur Aisyah">Amalia Nur Aisyah</option>
             </select>
 
             <label for="ncvs">NCVS</label>
             <select id="ncvs">
-                 <option value="">Select</option>
                 <option value="Line 1">Line 1</option>
                 <option value="Line 2">Line 2</option>
                 <option value="Line 3">Line 3</option>
@@ -172,7 +176,9 @@
 
             </div>
 </div>
-
+<div id="loading-overlay">
+        <div class="spinner"></div>
+    </div>
 
     <script src="script.js"></script>
 </body>
