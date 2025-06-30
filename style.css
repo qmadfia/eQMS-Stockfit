@@ -1022,7 +1022,7 @@ h1:hover {
 .close-button {
     position: absolute;
     top: 5px;
-    right: 10px;
+    right: 20px;
     font-size: 30px;
     cursor: pointer;
     color: white;
