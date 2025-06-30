@@ -961,22 +961,18 @@ h1:hover {
     padding: 0;
     transition: color 0.3s ease, transform 0.2s ease;
 }
-
 .announcement-button:hover {
     transform: scale(1.1);
 }
-
 .announcement-icon {
     font-size: 30px;
     color: #FF9800;
     transition: transform 0.2s ease;
 }
-
 .announcement-icon:hover {
     transform: scale(1.2);
     color: #e68900;
 }
-
 .announcement-popup {
     display: none;
     position: fixed;
@@ -985,6 +981,7 @@ h1:hover {
     transform: translate(-50%, -50%);
     width: 80%;
     max-width: 600px;
+    max-height: 80vh; /* Batasi tinggi maksimal popup */
     background: linear-gradient(135deg, #2979FF, #D50000); /* Gradasi biru dan merah */
     background-blend-mode: multiply; /* Efek memudar */
     box-shadow: 0 10px 25px rgba(213, 0, 0, 0.3); /* Shadow dengan warna senada */
@@ -992,58 +989,34 @@ h1:hover {
     padding: 30px;
     z-index: 10000;
     animation: popupFadeIn 0.5s ease-in-out;
+    overflow: hidden; /* Sembunyikan overflow pada container utama */
 }
-
 @keyframes popupFadeIn {
     from { opacity: 0; transform: translate(-50%, -60%); }
     to { opacity: 1; transform: translate(-50%, -50%); }
 }
-
 .announcement-content {
     position: relative;
+    max-height: calc(80vh - 60px); /* Sesuaikan dengan padding popup */
+    overflow-y: auto; /* Tambahkan scroll vertikal */
+    padding-right: 10px; /* Beri ruang untuk scrollbar */
 }
 
-.close-button {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 24px;
-    cursor: pointer;
-    color: white; /* Warna teks putih agar kontras */
+/* Custom scrollbar styling */
+.announcement-content::-webkit-scrollbar {
+    width: 8px;
 }
-
-.announcement-date {
-    font-weight: bold;
-    font-size: 1.2em;
-    margin-bottom: 10px;
-    color: white;
-    padding: 10px 15px;
-    background-color: rgba(255, 255, 255, 0.2);
+.announcement-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
-    text-align: center;
 }
-
-.date-controls {
-    display: flex;
-    align-items: center; /* Menyelaraskan item secara vertikal */
-    justify-content: center;
-    margin-top: 10px;
-}
-
-#date-text {
-    margin: 0 10px;
-}
-
-.announcement-nav {
-    background: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1em;
-    font-weight: bold;
-    color: #333;
+.announcement-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
     transition: background 0.3s ease;
+}
+.announcement-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
 }
 
 .close-button {
@@ -1055,8 +1028,36 @@ h1:hover {
     color: white;
     z-index: 10001; /* Pastikan selalu di atas */
 }
-
-
+.announcement-date {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: white;
+    padding: 10px 15px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    text-align: center;
+}
+.date-controls {
+    display: flex;
+    align-items: center; /* Menyelaraskan item secara vertikal */
+    justify-content: center;
+    margin-top: 10px;
+}
+#date-text {
+    margin: 0 10px;
+}
+.announcement-nav {
+    background: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    color: #333;
+    transition: background 0.3s ease;
+}
 .announcement-text {
     text-align: justify;
     font-size: 1em;
@@ -1066,8 +1067,57 @@ h1:hover {
     padding: 20px;
     background-color: rgba(255, 255, 255, 0.2); /* Latar belakang semi-transparan */
     border-radius: 10px;
+    
+    /* Pengaturan word wrapping yang lebih baik */
+    word-wrap: break-word; /* Memecah kata panjang */
+    overflow-wrap: break-word; /* Dukungan browser modern */
+    hyphens: auto; /* Tambahkan tanda hubung otomatis */
+    white-space: pre-wrap; /* Pertahankan spasi dan line break */
+    
+    /* Pengaturan untuk indentasi yang konsisten */
+    text-indent: 0; /* Reset indentasi default */
 }
 
+/* Khusus untuk list dalam announcement text */
+.announcement-text ol,
+.announcement-text ul {
+    padding-left: 20px;
+    margin: 10px 0;
+}
+
+.announcement-text li {
+    margin-bottom: 8px;
+    text-indent: 0; /* Pastikan item list tidak ter-indent */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    /* Untuk memastikan teks panjang dalam list item terbungkus dengan baik */
+    display: list-item;
+    list-style-position: outside; /* Nomor/bullet berada di luar area teks */
+}
+
+/* Styling untuk responsive pada layar kecil */
+@media (max-width: 768px) {
+    .announcement-popup {
+        width: 90%;
+        max-height: 90vh;
+        padding: 20px;
+    }
+    
+    .announcement-content {
+        max-height: calc(90vh - 40px);
+    }
+    
+    .close-button {
+        top: 5px;
+        right: 10px;
+        font-size: 24px;
+    }
+    
+    .announcement-text {
+        font-size: 0.9em;
+        padding: 15px;
+    }
+}
 /* ============================= */
 /* 13. Statistik Button Styles */
 /* ============================= */
