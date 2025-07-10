@@ -63,7 +63,7 @@ h1:hover {
     gap: 10px; /* Jaga jarak 10px antar grid items */
     padding: 1px; /* Mengurangi padding dashboard jika terlalu lebar */
     box-sizing: border-box;
-    grid-template-columns: 1fr 3.5fr;
+    grid-template-columns: 1fr 1.8fr;
 
 }
 /* ============================= */
@@ -600,7 +600,7 @@ h1:hover {
 .defect-items {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 15px;
+    gap: 15px 33px;
 }
 
 .defect-button {
@@ -610,7 +610,7 @@ h1:hover {
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -619,7 +619,7 @@ h1:hover {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     min-width: 120px;
     min-height: 50px;
-    width: auto;
+    width: 165px;
     overflow: hidden;
     white-space: normal;
     word-wrap: break-word;
