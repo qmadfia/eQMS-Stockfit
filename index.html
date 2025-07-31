@@ -46,9 +46,9 @@
                 <option value="Siti Patimah">Siti Patimah</option>
             </select>
 
-            <label for="ncvs">NCVS</label>
+            <label for="ncvs">Line</label>
             <select id="ncvs">
-                <option value="Line 1">Line 1</option>
+                 <option value="Line 1">Line 1</option>
                 <option value="Line 2">Line 2</option>
                 <option value="Line 3">Line 3</option>
                 <option value="Line 4">Line 4</option>
@@ -60,11 +60,12 @@
                 <option value="Line 10">Line 10</option>
             </select>
 
-            <label for="model-name">Model Name</label>
-            <input type="text" id="model-name" placeholder="Enter model name">
+<label for="style-number">Style Number</label>
+<input type="text" id="style-number" placeholder="Style number diisi lengkap">
 
-            <label for="style-number">Style Number</label>
-            <input type="text" id="style-number" placeholder="Style number diisi lengkap">
+<label for="model-name">Model Name</label>
+<input type="text" id="model-name" placeholder="Enter model name" readonly>
+
             <!-- Wrapper for Save Button -->
             <div class="button-wrapper">
                 <button class="save-button">SIMPAN</button>
@@ -180,13 +181,12 @@
 <button class="defect-button defect-red" data-defect="DELAMINATION">DELAMINATION</button>
 <button class="defect-button defect-red" data-defect="BOND GAP">BOND GAP</button>
 <button class="defect-button defect-red" data-defect="IP HOLE>2mm">IP HOLE>2mm</button>
-
             </div>
 </div>
 <div id="loading-overlay">
         <div class="spinner"></div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="script.js" type="module"></script>
 </body>
 </html>
