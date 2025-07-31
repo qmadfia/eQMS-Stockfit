@@ -1,6 +1,9 @@
 // ===========================================
 // 1. Deklarasi Variabel Global dan DOM References (Modifikasi)
 // ===========================================
+// --- IMPOR DATABASE DARI FILE TERPISAH ---
+// Pastikan path './databasemodel.js' sudah benar sesuai lokasi file Anda.
+import { styleModelDatabase } from './databasemodel.js';
 let totalInspected = 0;
 // Variabel lama ini masih berguna untuk tampilan UI, tapi tidak untuk kalkulasi final
 let totalReworkLeft = 0;
@@ -47,7 +50,8 @@ let reworkButtons;
 let gradeInputButtons;
 let ncvsSelect;
 let auditorSelect;
-
+let modelNameInput;
+let styleNumberInput;
 // Data mapping Auditor ke NCVS
 const auditorNcvsMap = {
     "Amalia Nur Aisyah": ["Line 1", "Line 2", "Line 3", "Line 4", "Line 5", "Line 6", "Line 7", "Line 8", "Line 9", "Line 10"],
@@ -681,7 +685,7 @@ function handleReworkClick(button) {
     // Panggil fungsi untuk menonaktifkan tombol yang baru saja diklik secara permanen untuk siklus ini
     updateReworkButtonStates();
     // Nonaktifkan kembali Rework Section (karena tidak ada defect yang sedang dipilih)
-    toggleButtonGroup(reworkButtons, false); 
+    toggleButtonGroup(reworkButtons, false);    
     // --- MODIFIKASI SELESAI ---
     
     // Aktifkan Qty Section karena status kembali "bersih"
@@ -698,6 +702,24 @@ function handleGradeClick(button) {
     const gradeCategory = Array.from(button.classList).find(cls => cls.endsWith('-grade'));
     if (!gradeCategory) return;
 
+    // --- MODIFIKASI DIMULAI ---
+    // Jika tombol adalah B-Grade atau C-Grade, tampilkan konfirmasi
+    if (gradeCategory === 'b-grade' || gradeCategory === 'c-grade') {
+        // Simpan referensi ke tombol dan kategori grade untuk digunakan di callback popup
+        showConfirmationPopup(gradeCategory, () => {
+            // Callback jika pengguna memilih 'YA'
+            processGradeClick(button, gradeCategory);
+        });
+        return; // Hentikan eksekusi handleGradeClick sampai konfirmasi diterima
+    }
+    // --- MODIFIKASI SELESAI ---
+
+    // Untuk A-Grade dan R-Grade, langsung proses
+    processGradeClick(button, gradeCategory);
+}
+
+// --- FUNGSI BARU: Fungsi pembantu untuk memproses klik grade setelah konfirmasi ---
+function processGradeClick(button, gradeCategory) {
     // Jika item ini adalah R-Grade dan memiliki cacat yang tercatat...
     if (gradeCategory === 'r-grade' && currentInspectionPairs.length > 0) {
         // Ambil posisi rework yang unik dari pasangan cacat saat ini
@@ -729,6 +751,55 @@ function handleGradeClick(button) {
     setTimeout(() => {
         initButtonStates();
     }, 150);
+}
+
+
+// --- FUNGSI BARU: Menampilkan Pop-up Konfirmasi ---
+function showConfirmationPopup(grade, onConfirmCallback) {
+    const confirmationText = `Apakah Anda menemukan defect ${grade.toUpperCase()}?`;
+
+    // Buat elemen popup dinamis
+    const popupOverlay = document.createElement('div');
+    popupOverlay.className = 'confirmation-overlay'; // Tambahkan class untuk styling CSS
+
+    const popupContent = document.createElement('div');
+    popupContent.className = 'confirmation-content';
+
+    const message = document.createElement('p');
+    message.textContent = confirmationText;
+
+    const buttonContainer = document.createElement('div');
+    buttonContainer.className = 'confirmation-buttons';
+
+    const backButton = document.createElement('button');
+    backButton.textContent = 'Kembali';
+    backButton.className = 'button-back'; // Class untuk styling
+
+    const confirmButton = document.createElement('button');
+    confirmButton.textContent = 'YA';
+    confirmButton.className = 'button-confirm'; // Class untuk styling
+
+    buttonContainer.appendChild(backButton);
+    buttonContainer.appendChild(confirmButton);
+
+    popupContent.appendChild(message);
+    popupContent.appendChild(buttonContainer);
+    popupOverlay.appendChild(popupContent);
+
+    document.body.appendChild(popupOverlay); // Tambahkan ke body
+
+    // Event listener untuk tombol 'Kembali'
+    backButton.addEventListener('click', () => {
+        document.body.removeChild(popupOverlay); // Hapus popup
+        console.log("Aksi dibatalkan oleh pengguna.");
+        // Tidak perlu melakukan apa-apa lagi, karena callback tidak dipanggil
+    });
+
+    // Event listener untuk tombol 'YA'
+    confirmButton.addEventListener('click', () => {
+        document.body.removeChild(popupOverlay); // Hapus popup
+        onConfirmCallback(); // Panggil callback untuk melanjutkan proses grade
+    });
 }
 
 
@@ -954,6 +1025,12 @@ function resetAllFields() {
         styleNumberInput.value = "";
         styleNumberInput.classList.remove('invalid-input');
     }
+    
+        // Reset input Model Name dan pastikan aktif kembali
+    if (modelNameInput) {
+        modelNameInput.value = "";
+        modelNameInput.disabled = false; // Penting: aktifkan kembali
+    }
 
     // Reset data internal utama
     for (const categoryKey in qtyInspectOutputs) {
@@ -986,6 +1063,38 @@ function resetAllFields() {
     
     console.log("Semua field dan data internal telah berhasil direset.");
 }
+
+// ===========================================
+// FUNGSI BARU: Auto-fill Model Name berdasarkan Style Number
+// ===========================================
+function autoFillModelName() {
+    // Pastikan elemen input sudah diinisialisasi
+    if (!styleNumberInput || !modelNameInput) {
+        console.error("Elemen Style Number atau Model Name tidak ditemukan.");
+        return;
+    }
+
+    // Ambil nilai dari input Style Number, bersihkan spasi, dan ubah ke huruf besar
+    // agar cocok dengan kunci di styleModelDatabase (jika kunci Anda huruf besar).
+    const enteredStyleNumber = styleNumberInput.value.trim().toUpperCase();
+    
+    // Cari model yang cocok di database
+    const matchedModel = styleModelDatabase[enteredStyleNumber];
+
+    if (matchedModel) {
+        // Jika ditemukan kecocokan, isi input Model Name
+        modelNameInput.value = matchedModel;
+        // Nonaktifkan input Model Name agar tidak diubah secara manual
+        modelNameInput.disabled = true;
+    } else {
+        // Jika tidak ditemukan kecocokan, kosongkan input Model Name
+        modelNameInput.value = "";
+        // Aktifkan kembali input Model Name agar auditor bisa mengetik manual
+        modelNameInput.disabled = false;
+    }
+}
+
+
 
 // ===========================================
 // 16. Inisialisasi Aplikasi dan Event Listeners (Dilengkapi dengan loadFromLocalStorage)
@@ -1033,23 +1142,21 @@ function initApp() {
         });
     }
 
+    // Pastikan Anda menginisialisasi DOM references untuk input Model Name dan Style Number di sini:
+    modelNameInput = document.getElementById("model-name");
+    styleNumberInput = document.getElementById("style-number");
+
     // Event listener untuk input form lainnya
-    const modelNameInput = document.getElementById("model-name");
-    const styleNumberInput = document.getElementById("style-number");
-    
     if (modelNameInput) {
         modelNameInput.addEventListener('input', saveToLocalStorage);
     }
     
     if (styleNumberInput) {
-        styleNumberInput.addEventListener('input', saveToLocalStorage);
-    }
-
-    // Cek apakah elemen output ditemukan
-    for (const category in outputElements) {
-        if (!outputElements[category]) {
-            console.error(`INIT ERROR: Elemen output dengan ID '${category.replace('-grade', '-counter')}' tidak ditemukan di HTML!`);
-        }
+        // Saat auditor mengetik di Style Number, panggil fungsi autoFillModelName
+        styleNumberInput.addEventListener('input', () => {
+            saveToLocalStorage(); // Auto-save perubahan input
+            autoFillModelName(); // Panggil fungsi auto-fill
+        });
     }
 
     // Setup Event Listeners untuk tombol (defect, rework, grade)
@@ -1205,7 +1312,7 @@ function updateNcvsOptions(selectedAuditor) {
     // Tambahkan opsi default "Pilih NCVS"
     const defaultOption = document.createElement('option');
     defaultOption.value = "";
-    defaultOption.textContent = "Pilih NCVS";
+    defaultOption.textContent = "Pilih Line";
     ncvsSelect.appendChild(defaultOption);
 
     // Dapatkan data NCVS yang sudah digunakan untuk auditor hari ini
@@ -1230,7 +1337,7 @@ function updateNcvsOptions(selectedAuditor) {
         ncvsSelect.disabled = false;
     } else {
         ncvsSelect.disabled = true;
-        defaultOption.textContent = "Pilih NCVS (pilih Auditor dahulu)";
+        defaultOption.textContent = "Pilih Line (pilih Auditor dahulu)";
     }
     ncvsSelect.value = "";
 }
@@ -1246,7 +1353,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 Apabila terdapat kendala teknis, silakan hubungi nomor berikut: 088972745194.`
         },
-                {  
+          {  
             date: "06-30-2025",
             // Teks pengumuman yang panjang tetap sama
             text: `🛠️ FTT Sampling App Update v.2025.06
@@ -1276,10 +1383,37 @@ Apabila terdapat kendala teknis, silakan hubungi nomor berikut: 088972745194.`
 📦 Data Handling & Penyimpanan
 1. Memastikan seluruh data input tersimpan dengan benar di localStorage
 2. Mengimplementasikan validasi localStorage agar data tetap tersimpan meski browser ditutup atau di-refresh
-3. Mngoptimasi keamanan dan volume data input API
-4. Mngoptimasi batas permintaan (request limits) pada Vercel
+3. Mengoptimasi keamanan dan volume data input API
+4. Mengoptimasi batas permintaan (request limits) pada Vercel
 5. Menerapkan rate limiting pada Vercel Functions
 6. Menyimpan nilai yang tepat untuk Rework Left, Right, dan Pairs ke dalam database`
+        },
+{  
+            date: "07-31-2025", 
+            text: `🛠️ FTT Sampling App Update v.2025.07 – Dashboard Enhancement & Maintenance
+
+📊 Statistical Dashboard Upgrade
+1. Menambahkan filter: Start/End Date, Auditor, NCVS, Model, Style Number
+2. Mengimplementasikan bar, pie, dan line chart untuk FTT, defect, dan grade
+3. Menampilkan Avg. FTT, Rework Rate, dan A-Grade Ratio (%, 2 desimal)
+4. Menyesuaikan label, axis, dan format tanggal pada chart
+5. Membatasi jumlah data point dan menambahkan opsi rentang waktu dinamis
+
+📄 Full Inspection Data
+1. Menambahkan fitur sort, filter, dan quick filter
+2. Merapikan struktur, alignment, dan default view tabel
+
+⚙️ Functional & UI Maintenance
+1. Memformat seluruh metrik ke persen, presisi 2 desimal
+2. Menyempurnakan spacing antar section dan konsistensi judul
+3. Menambahkan input validation saat user mengakses menu B-Grade atau C-Grade
+4. Menambahkan fitur auto-fill pada field model name berdasarkan input style number
+
+🧱 Code Structure & Integration
+1. Modularisasi HTML, CSS, JS untuk maintainability
+2. Menghubungkan dashboard ke halaman utama aplikasi
+3. Menambahkan tombol “Back to Main Page”
+4. Optimasi load data dan refactor script untuk performa lebih baik`
         },
     ];
     let currentAnnouncementIndex = 0;
