@@ -23,6 +23,9 @@ let reworkLog = [];
 // --- MODIFIKASI DIMULAI ---
 // Variabel baru untuk melacak posisi rework yang sudah dipakai dalam satu siklus inspeksi
 let usedReworkPositionsThisCycle = [];
+
+// --- MODIFIKASI BARU: Variabel untuk limit dinamis ---
+let currentInspectionLimit = 0;
 // --- MODIFIKASI SELESAI ---
 // ---------------------------------------------
 
@@ -52,6 +55,7 @@ let ncvsSelect;
 let auditorSelect;
 let modelNameInput;
 let styleNumberInput;
+
 // Data mapping Auditor ke NCVS
 const auditorNcvsMap = {
     "Amalia Nur Aisyah": ["Line 1", "Line 2", "Line 3", "Line 4", "Line 5", "Line 6", "Line 7", "Line 8", "Line 9", "Line 10"],
@@ -70,8 +74,6 @@ const STORAGE_KEYS = {
     STATE_VARIABLES: 'qms_state_variables',
     QTY_SAMPLE_SET: 'qtySampleSet'
 };
-
-const MAX_INSPECTION_LIMIT = 24;
 
 // ===========================================
 // 2. Fungsi localStorage Komprehensif (Modifikasi)
@@ -102,9 +104,7 @@ function saveToLocalStorage() {
             currentInspectionPairs: currentInspectionPairs,
             totalInspected: totalInspected,
             reworkLog: reworkLog,
-            // --- MODIFIKASI DIMULAI ---
-            usedReworkPositionsThisCycle: usedReworkPositionsThisCycle // Simpan status rework yang digunakan
-            // --- MODIFIKASI SELESAI ---
+            usedReworkPositionsThisCycle: usedReworkPositionsThisCycle
         };
         localStorage.setItem(STORAGE_KEYS.STATE_VARIABLES, JSON.stringify(stateVariables));
 
@@ -155,15 +155,14 @@ function loadFromLocalStorage() {
             currentInspectionPairs = stateData.currentInspectionPairs || [];
             totalInspected = stateData.totalInspected || 0;
             reworkLog = stateData.reworkLog || [];
-            // --- MODIFIKASI DIMULAI ---
-            usedReworkPositionsThisCycle = stateData.usedReworkPositionsThisCycle || []; // Muat status rework yang digunakan
-            // --- MODIFIKASI SELESAI ---
+            usedReworkPositionsThisCycle = stateData.usedReworkPositionsThisCycle || [];
         }
         
         // Memuat Qty Sample Set
         const savedQtySampleSet = localStorage.getItem(STORAGE_KEYS.QTY_SAMPLE_SET);
         if (qtySampleSetInput && savedQtySampleSet) {
-             qtySampleSetInput.value = parseInt(savedQtySampleSet, 10) > 0 ? savedQtySampleSet : '';
+            qtySampleSetInput.value = parseInt(savedQtySampleSet, 10) >= 0 ? savedQtySampleSet : '0';
+            currentInspectionLimit = parseInt(savedQtySampleSet, 10) || 0;
         }
         
         // Update semua tampilan berdasarkan data yang dimuat
@@ -209,10 +208,8 @@ function updateButtonStatesFromLoadedData() {
     const enableRework = selectedDefects.length > 0;
     toggleButtonGroup(reworkButtons, enableRework);
     
-    // --- MODIFIKASI DIMULAI ---
     // Panggil fungsi baru untuk menonaktifkan tombol rework yang sudah digunakan dari data yang dimuat
     updateReworkButtonStates();
-    // --- MODIFIKASI SELESAI ---
 
     // Atur status Qty Section (R/B/C) sesuai aturan baru
     updateQtySectionState();
@@ -238,13 +235,10 @@ function clearLocalStorageExceptQtySampleSet() {
 // Fungsi untuk mengaktifkan/menonaktifkan sekelompok tombol
 function toggleButtonGroup(buttons, enable) {
     buttons.forEach(button => {
-        // --- MODIFIKASI DIMULAI ---
-        // Hanya ubah status 'disabled' jika tidak dinonaktifkan secara paksa oleh logika lain
         if (!button.dataset.forceDisabled) {
              button.disabled = !enable;
              button.classList.toggle('inactive', !enable);
         }
-        // --- MODIFIKASI SELESAI ---
         
         // Hapus highlight 'active' saat dinonaktifkan
         if (!enable) {
@@ -253,7 +247,6 @@ function toggleButtonGroup(buttons, enable) {
     });
 }
 
-// --- MODIFIKASI DIMULAI ---
 // ===========================================
 // FUNGSI PEMBANTU BARU: Menonaktifkan Tombol Rework Individual
 // ===========================================
@@ -282,7 +275,6 @@ function updateReworkButtonStates() {
         }
     });
 }
-// --- MODIFIKASI SELESAI ---
 
 
 // ===========================================
@@ -302,6 +294,33 @@ function updateAGradeButtonState() {
 }
 
 // ===========================================
+// FUNGSI BARU: Mengatur Status Tombol Berdasarkan Qty Sample Set Limit
+// ===========================================
+function updateButtonStatesBasedOnLimit() {
+    const hasReachedLimit = totalInspected >= currentInspectionLimit && currentInspectionLimit > 0;
+    
+    if (hasReachedLimit) {
+        // Nonaktifkan semua tombol input
+        toggleButtonGroup(defectButtons, false);
+        toggleButtonGroup(reworkButtons, false);
+        toggleButtonGroup(gradeInputButtons, false);
+        
+        // Hapus highlight aktif
+        defectButtons.forEach(btn => btn.classList.remove('active'));
+        reworkButtons.forEach(btn => btn.classList.remove('active'));
+        gradeInputButtons.forEach(btn => btn.classList.remove('active'));
+        
+        console.log(`Limit inspeksi ${currentInspectionLimit} tercapai. Input dinonaktifkan.`);
+    } else if (currentInspectionLimit > 0) {
+        // Jika belum mencapai limit, aktifkan kembali tombol sesuai state normal
+        // Hanya jalankan jika sedang tidak dalam proses inspeksi
+        if (selectedDefects.length === 0 && currentInspectionPairs.length === 0) {
+            initButtonStates();
+        }
+    }
+}
+
+// ===========================================
 // 4. Fungsi Utama: Inisialisasi Status Tombol (Modifikasi)
 // ===========================================
 function initButtonStates() {
@@ -310,9 +329,7 @@ function initButtonStates() {
     // Reset variabel state untuk siklus baru
     selectedDefects = [];
     currentInspectionPairs = [];
-    // --- MODIFIKASI DIMULAI ---
     usedReworkPositionsThisCycle = []; // KOSONGKAN riwayat rework untuk siklus baru
-    // --- MODIFIKASI SELESAI ---
 
     // Reset tampilan visual tombol
     defectButtons.forEach(btn => btn.classList.remove('active'));
@@ -323,19 +340,17 @@ function initButtonStates() {
     // Panggil fungsi ini untuk mengaktifkan kembali A-Grade
     updateAGradeButtonState();
     
-    // --- MODIFIKASI DIMULAI ---
     // Panggil fungsi update rework untuk memastikan semua tombol kembali aktif (atribut forceDisabled dihapus)
     updateReworkButtonStates(); 
     // Kemudian nonaktifkan grup Rework & Qty (R/B/C)
     toggleButtonGroup(reworkButtons, false); 
-    // --- MODIFIKASI SELESAI ---
     updateQtySectionState(); 
     
-    // Cek batas inspeksi
-    if (totalInspected >= MAX_INSPECTION_LIMIT) {
+    // Cek batas inspeksi menggunakan currentInspectionLimit
+    if (totalInspected >= currentInspectionLimit && currentInspectionLimit > 0) {
         toggleButtonGroup(defectButtons, false);
         toggleButtonGroup(gradeInputButtons, false); // Nonaktifkan semua grade termasuk A
-        console.log(`Batas inspeksi ${MAX_INSPECTION_LIMIT} tercapai. Input dinonaktifkan.`);
+        console.log(`Batas inspeksi ${currentInspectionLimit} tercapai. Input dinonaktifkan.`);
     }
 }
 
@@ -476,24 +491,8 @@ function updateTotalQtyInspect() {
     updateRedoRate(); // Selalu panggil update Redo Rate
     saveToLocalStorage(); // Simpan ke localStorage setiap ada perubahan
 
-    // --- LOGIKA BATAS INSPEKSI 50 YANG DIPERBAIKI ---
-    if (totalInspected >= MAX_INSPECTION_LIMIT) {
-        // Menonaktifkan SEMUA tombol input yang relevan secara PERMANEN
-        // (sampai aplikasi di-reset)
-        toggleButtonGroup(defectButtons, false);
-        toggleButtonGroup(reworkButtons, false);
-        toggleButtonGroup(gradeInputButtons, false);
-        console.log(`Batas inspeksi ${MAX_INSPECTION_LIMIT} telah tercapai. Input dinonaktifkan.`);
-        // Pastikan tidak ada tombol yang ter-highlight saat ini
-        defectButtons.forEach(btn => btn.classList.remove('active'));
-        reworkButtons.forEach(btn => btn.classList.remove('active'));
-        gradeInputButtons.forEach(btn => btn.classList.remove('active'));
-    } else {
-        // JANGAN panggil initButtonStates di sini, karena itu mereset state.
-        // initButtonStates akan dipanggil pada tempat yang tepat (setelah siklus input selesai).
-        // Biarkan alur handleDefectClick, handleReworkClick, handleGradeClick yang mengatur status tombol dinamis.
-    }
-    // --- AKHIR LOGIKA BATAS INSPEKSI 50 ---
+    // Gunakan fungsi baru untuk mengecek limit
+    updateButtonStatesBasedOnLimit();
 }
 
 // ===========================================
@@ -635,12 +634,10 @@ function handleDefectClick(button) {
     const enableRework = selectedDefects.length > 0;
     toggleButtonGroup(reworkButtons, enableRework);
 
-    // --- MODIFIKASI DIMULAI ---
     // Setelah mengaktifkan/menonaktifkan grup, jalankan fungsi untuk menonaktifkan tombol individual yang sudah terpakai
     if(enableRework) {
         updateReworkButtonStates();
     }
-    // --- MODIFIKASI SELESAI ---
 
     // Nonaktifkan Qty Section (R/B/C)
     updateQtySectionState();
@@ -653,23 +650,19 @@ function handleDefectClick(button) {
 
 // Handler untuk klik tombol Rework Section
 function handleReworkClick(button) {
-    // --- MODIFIKASI DIMULAI ---
     // Keluar jika tombol sudah dinonaktifkan (baik karena grup tidak aktif atau sudah diklik sebelumnya)
     if (button.disabled) {
         console.log("Tombol rework ini tidak dapat digunakan saat ini.");
         return;
     }
-    // --- MODIFIKASI SELESAI ---
 
     const reworkPosition = button.id.replace('rework-', '').toUpperCase();
     
     // Pastikan ada defect yang dipilih sebelum memproses
     if (selectedDefects.length === 0) return;
     
-    // --- MODIFIKASI DIMULAI ---
     // Tambahkan posisi yang baru diklik ke array pelacak
     usedReworkPositionsThisCycle.push(reworkPosition);
-    // --- MODIFIKASI SELESAI ---
 
     // Update counter rework
     updateQuantity(button.id.replace('rework-', '') + '-counter');
@@ -683,12 +676,10 @@ function handleReworkClick(button) {
     selectedDefects = [];
     defectButtons.forEach(btn => btn.classList.remove('active'));
 
-    // --- MODIFIKASI DIMULAI ---
     // Panggil fungsi untuk menonaktifkan tombol yang baru saja diklik secara permanen untuk siklus ini
     updateReworkButtonStates();
     // Nonaktifkan kembali Rework Section (karena tidak ada defect yang sedang dipilih)
     toggleButtonGroup(reworkButtons, false);    
-    // --- MODIFIKASI SELESAI ---
     
     // Aktifkan Qty Section karena status kembali "bersih"
     updateQtySectionState();
@@ -704,7 +695,6 @@ function handleGradeClick(button) {
     const gradeCategory = Array.from(button.classList).find(cls => cls.endsWith('-grade'));
     if (!gradeCategory) return;
 
-    // --- MODIFIKASI DIMULAI ---
     // Jika tombol adalah B-Grade atau C-Grade, tampilkan konfirmasi
     if (gradeCategory === 'b-grade' || gradeCategory === 'c-grade') {
         // Simpan referensi ke tombol dan kategori grade untuk digunakan di callback popup
@@ -714,7 +704,6 @@ function handleGradeClick(button) {
         });
         return; // Hentikan eksekusi handleGradeClick sampai konfirmasi diterima
     }
-    // --- MODIFIKASI SELESAI ---
 
     // Untuk A-Grade dan R-Grade, langsung proses
     processGradeClick(button, gradeCategory);
@@ -811,10 +800,8 @@ function showConfirmationPopup(grade, onConfirmCallback) {
 async function saveData() {
     console.log("Memulai proses simpan data...");
 
-    // --- MODIFIKASI DIMULAI ---
     // Dapatkan elemen overlay dari DOM
     const loadingOverlay = document.getElementById('loading-overlay');
-    // --- MODIFIKASI SELESAI ---
 
     if (!validateInputs() || !validateQtySampleSet()) {
         console.log("Validasi dasar gagal. Penyimpanan dibatalkan.");
@@ -884,15 +871,15 @@ async function saveData() {
     saveButton.disabled = true;
     saveButton.textContent = "MENYIMPAN...";
 
-    // --- MODIFIKASI DIMULAI ---
     // Tampilkan loading overlay SEBELUM memulai proses fetch
     if (loadingOverlay) {
         loadingOverlay.classList.add('visible');
     }
-    // --- MODIFIKASI SELESAI ---
-dataToSend.appType = "stockfit";
+
+    dataToSend.appType = "stockfit";
+    
     try {
-        const response = await fetch("https://script.google.com/macros/s/AKfycbz6MSvAqN2vhsasQ-fK_2hxgOkeue3zlc5TsfyLISX8VydruDi5CdTsDgmyPXozv3SB/exec", {
+        const response = await fetch("https://script.google.com/macros/s/AKfycbwp9jX0u4u6qKtP3HoBKg2-Bi0Hcn0vCBh4p3TnFhjIsg4-bUp3F6dlM2GGIMUPop8X/exec", {
             method: "POST",
             body: JSON.stringify(dataToSend),
         });
@@ -909,12 +896,10 @@ dataToSend.appType = "stockfit";
         console.error("Error saat mengirim data:", error);
         alert("Terjadi kesalahan saat menyimpan data.");
     } finally {
-        // --- MODIFIKASI DIMULAI ---
         // SELALU sembunyikan overlay di blok finally, baik proses berhasil maupun gagal
         if (loadingOverlay) {
             loadingOverlay.classList.remove('visible');
         }
-        // --- MODIFIKASI SELESAI ---
 
         saveButton.disabled = false;
         saveButton.textContent = "SIMPAN";
@@ -985,7 +970,7 @@ function validateDefects() {
 }
 
 // ===========================================
-// 14. Validasi Qty Sample Set
+// 14. Validasi Qty Sample Set (MODIFIKASI - Script 2 Style)
 // ===========================================
 function validateQtySampleSet() {
     if (!qtySampleSetInput) {
@@ -995,9 +980,9 @@ function validateQtySampleSet() {
 
     const qtySampleSetValue = parseInt(qtySampleSetInput.value, 10);
 
-    // Validasi jika Qty Sample Set kosong atau 0
-    if (isNaN(qtySampleSetValue) || qtySampleSetValue <= 0) {
-        alert("Harap masukkan Jumlah Qty Sample Set yang valid dan lebih dari 0.");
+    // Validasi jika Qty Sample Set kosong atau kurang dari 0
+    if (isNaN(qtySampleSetValue) || qtySampleSetValue < 0) {
+        alert("Harap masukkan Jumlah Qty Sample Set yang valid (minimal 0).");
         return false;
     }
 
@@ -1028,7 +1013,7 @@ function resetAllFields() {
         styleNumberInput.classList.remove('invalid-input');
     }
     
-        // Reset input Model Name dan pastikan aktif kembali
+    // Reset input Model Name dan pastikan aktif kembali
     if (modelNameInput) {
         modelNameInput.value = "";
         modelNameInput.disabled = false; // Penting: aktifkan kembali
@@ -1047,7 +1032,10 @@ function resetAllFields() {
     // KOSONGKAN SEMUA DATA INTERNAL YANG BARU
     selectedDefects = [];
     currentInspectionPairs = [];
-    reworkLog = []; // <-- TAMBAHKAN INI
+    reworkLog = [];
+    
+    // Reset currentInspectionLimit ke nilai qty sample set yang tersimpan
+    currentInspectionLimit = qtySampleSetInput ? parseInt(qtySampleSetInput.value, 10) || 0 : 0;
 
     // Reset tampilan
     updateAllDisplays();
@@ -1142,6 +1130,25 @@ function initApp() {
         ncvsSelect.addEventListener('change', () => {
             saveToLocalStorage(); // Auto-save saat ada perubahan
         });
+        
+        // --- TAMBAHKAN CODE BARU INI ---
+        // Event listener untuk menampilkan notifikasi saat NCVS yang sudah diinput dipilih
+        ncvsSelect.addEventListener('change', () => {
+            const selectedNcvs = ncvsSelect.value;
+            const selectedAuditor = auditorSelect ? auditorSelect.value : '';
+            
+            if (selectedNcvs && selectedAuditor) {
+                // Dapatkan data NCVS yang sudah digunakan untuk auditor ini pada hari ini
+                const usedNcvsForToday = getUsedNcvsData();
+                const usedNcvsBySelectedAuditor = usedNcvsForToday[selectedAuditor] || [];
+                
+                // Cek apakah NCVS yang dipilih sudah digunakan oleh auditor ini
+                if (usedNcvsBySelectedAuditor.includes(selectedNcvs)) {
+                    alert(`Perhatian: NCVS ${selectedNcvs} telah diinput oleh ${selectedAuditor} pada hari ini.`);
+                }
+            }
+        });
+        // --- AKHIR CODE BARU ---
     }
 
     // Pastikan Anda menginisialisasi DOM references untuk input Model Name dan Style Number di sini:
@@ -1192,28 +1199,44 @@ function initApp() {
         saveButton.addEventListener("click", saveData);
     }
 
-    // Inisialisasi Qty Sample Set
+    // Inisialisasi Qty Sample Set (MODIFIKASI - Script 2 Style)
     if (qtySampleSetInput) {
         let storedQty = localStorage.getItem('qtySampleSet');
         let qtySampleSetValue;
 
-        if (storedQty && !isNaN(parseInt(storedQty, 10)) && parseInt(storedQty, 10) > 0) {
+        if (storedQty && !isNaN(parseInt(storedQty, 10)) && parseInt(storedQty, 10) >= 0) {
             qtySampleSetValue = parseInt(storedQty, 10);
         } else {
-            qtySampleSetValue = '';
+            qtySampleSetValue = 0;
         }
 
         qtySampleSetInput.value = qtySampleSetValue;
+        currentInspectionLimit = qtySampleSetValue;
 
         qtySampleSetInput.addEventListener('change', () => {
             let newQty = parseInt(qtySampleSetInput.value, 10);
-            if (!isNaN(newQty) && newQty > 0) {
-                localStorage.setItem('qtySampleSet', newQty);
-            } else {
-                localStorage.removeItem('qtySampleSet');
+            
+            // Validasi: tidak boleh kurang dari 0
+            if (isNaN(newQty) || newQty < 0) {
+                alert("Qty Sample Set tidak boleh kurang dari 0.");
+                qtySampleSetInput.value = currentInspectionLimit;
+                return;
             }
-            updateTotalQtyInspect();
-            saveToLocalStorage(); // Auto-save saat ada perubahan
+            
+            // Validasi: tidak boleh lebih rendah dari total yang sudah diinspeksi
+            if (newQty < totalInspected) {
+                alert(`Qty Sample Set tidak bisa lebih rendah dari Qty Inspect saat ini (${totalInspected}).`);
+                qtySampleSetInput.value = currentInspectionLimit;
+                return;
+            }
+            
+            currentInspectionLimit = newQty;
+            localStorage.setItem('qtySampleSet', newQty);
+            
+            updateButtonStatesBasedOnLimit();
+            saveToLocalStorage();
+            
+            console.log(`Qty Sample Set diubah menjadi: ${currentInspectionLimit}`);
         });
     }
 
@@ -1226,7 +1249,7 @@ function initApp() {
     }
 
     
-    // >>> PENTING: LOAD DATA DARI LOCALSTORAGE SAAT APLIKASI DIMUAT <<<
+    // >>> PENTING: LOAD DATA DARI LOCALSTORAGE SAAT APLIKASI DIMUAT <
     loadFromLocalStorage();
 
     // Atur status tombol awal saat aplikasi dimuat (setelah load data)
@@ -1317,7 +1340,7 @@ function updateNcvsOptions(selectedAuditor) {
     defaultOption.textContent = "Pilih Line";
     ncvsSelect.appendChild(defaultOption);
 
-    // Dapatkan data NCVS yang sudah digunakan untuk auditor hari ini
+    // Dapatkan data NCVS yang sudah digunakan untuk auditor yang dipilih pada hari ini
     const usedNcvsForToday = getUsedNcvsData();
     const usedNcvsBySelectedAuditor = usedNcvsForToday[selectedAuditor] || [];
 
@@ -1327,11 +1350,17 @@ function updateNcvsOptions(selectedAuditor) {
         ncvsList.forEach(ncvs => {
             const option = document.createElement('option');
             option.value = ncvs;
-            option.textContent = ncvs;
-
-            // Terapkan warna merah jika NCVS sudah digunakan
-            if (usedNcvsBySelectedAuditor.includes(ncvs)) {
+            
+            // Cek apakah NCVS ini sudah digunakan oleh auditor yang dipilih
+            const isUsedByThisAuditor = usedNcvsBySelectedAuditor.includes(ncvs);
+            
+            if (isUsedByThisAuditor) {
+                // Tambahkan keterangan dalam kurung
+                option.textContent = `${ncvs} (NCVS telah diinput)`;
+                // Tetap tambahkan class untuk styling warna merah (untuk device yang support)
                 option.classList.add('used-ncvs');
+            } else {
+                option.textContent = ncvs;
             }
 
             ncvsSelect.appendChild(option);
@@ -1414,7 +1443,7 @@ Apabila terdapat kendala teknis, silakan hubungi nomor berikut: 088972745194.`
 🧱 Code Structure & Integration
 1. Modularisasi HTML, CSS, JS untuk maintainability
 2. Menghubungkan dashboard ke halaman utama aplikasi
-3. Menambahkan tombol “Back to Main Page”
+3. Menambahkan tombol "Back to Main Page"
 4. Optimasi load data dan refactor script untuk performa lebih baik`
         },
     ];
@@ -1485,4 +1514,3 @@ Apabila terdapat kendala teknis, silakan hubungi nomor berikut: 088972745194.`
         }
     }
 });
-
