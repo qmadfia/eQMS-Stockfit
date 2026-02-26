@@ -2958,7 +2958,7 @@ export const styleModelDatabase = {
 "IW1525-001": "G.T. CUT 4 CHRM (GS)",
 "IW1526-700": "G.T. CUT 4 JP (GS)",
 "IW1528-600": "G.T. CUT 4 DH (GS)",
-
+"IZ2688-600": "DIAMOND STANDOUT MCS SE MD",
 
     // Anda bisa menambahkan ribuan data lainnya di bawah ini.
     // Contoh: "G80011-223": "REEBOK CLASSIC LEATHER",
